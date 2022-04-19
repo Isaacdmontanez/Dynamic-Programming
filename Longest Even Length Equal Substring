@@ -1,0 +1,33 @@
+/*
+
+Longest Even Length Substring
+Finds the length of the longest substring where the left and right half equal eachother
+The left and right half must be the same length
+Time Complexity: O(n^2)
+Space Complexity: O(1)
+
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int longestSubStr(string strInput){
+    int strLen = strInput.length(), output = 0;
+    for(int dist = 0, curPos = 0; curPos < strLen; curPos++, dist = 0){
+        for(int leftSum = 0, rightSum = 0; curPos - dist >= 0 && curPos + dist + 1 < strLen; dist++){
+            leftSum += strInput.at(curPos - dist) - '0';
+            rightSum += strInput.at(curPos + dist + 1) - '0';
+            if (rightSum == leftSum){
+                output = max (output, 2 * (dist + 1));
+            }
+        }
+    }
+    return(output);
+}
+
+int main(){
+    string strInput;
+    cin>>strInput;
+    cout<<"The length of the longestest substring is: "<<longestSubStr(strInput)<<".\n";
+}
