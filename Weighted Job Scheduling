@@ -1,0 +1,44 @@
+/*
+
+Weighted Job Scheduling
+Given a set amount of jobs and their end time, start time, and pay, find the maximum amount of money that can be earned.
+Time Complexity: O(n log n)
+Space Complexity: O(n)
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int findBestJobs(vector<string> sorting, int numOfJobs){
+    //Sorts Jobs
+    stringstream sortedJobs;
+    vector <int> end(numOfJobs, 0), start(numOfJobs, 0), money(numOfJobs, 0);
+    sort(sorting.begin(), sorting.begin() + numOfJobs);
+    for(int i = 0; i < numOfJobs; i++){
+        sortedJobs<<sorting[i];
+    }
+    for(int i = 0; i < numOfJobs; i++){
+        sortedJobs>>end[i]>>start[i]>>money[i];
+    }
+    //Processes Jobs
+    vector <int> endMoney(numOfJobs + 1, 0);
+    for(int curStart = 0, curJob = 1; curJob <= numOfJobs; curJob++){
+        while(end[curStart] <= start[curJob - 1] && curStart < curJob){
+            curStart++;
+        }
+        endMoney[curJob] = max(endMoney[curJob - 1], endMoney[curStart] + money[curJob - 1]);
+    }
+    return(endMoney[numOfJobs]);
+}
+
+int main(){
+    vector <string> jobs;
+    int numOfJobs, end, start, money;
+    cin>>numOfJobs;
+    for(int i = 0; i < numOfJobs; i++){
+        cin>>end>>start>>money;
+        jobs.push_back(to_string(end) + " " + to_string(start) + " " + to_string(money) + " ");
+    }
+    cout<<"The max amount of money that can be earned is: "<<findBestJobs(jobs, numOfJobs)<<".\n";
+}
